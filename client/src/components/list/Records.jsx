@@ -9,7 +9,6 @@ const Records = () => {
 
   if (error) return `Error! ${error.message}`;
 
-  console.log(data);
   return (
     <section>
       <h2 className="text-center font-semibold uppercase mb-4">Records</h2>

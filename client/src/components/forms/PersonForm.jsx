@@ -1,31 +1,12 @@
-import { useState } from "react";
 import MainButton from "../buttons/MainButton";
 import InputField from "./InputField";
 
-const PersonForm = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("SUBMITT!!");
-  };
-
+const PersonForm = ({ onSubmit }) => {
   return (
-    <form className="flex justify-center gap-4" onSubmit={handleSubmit}>
-      <InputField
-        title="First Name"
-        isRequired
-        value={firstName}
-        onChange={setFirstName}
-      />
+    <form className="flex justify-center gap-4" onSubmit={onSubmit}>
+      <InputField title="First Name" isRequired name="firstName" />
 
-      <InputField
-        title="Last Name"
-        isRequired
-        value={lastName}
-        onChange={setLastName}
-      />
+      <InputField title="Last Name" isRequired name="lastName" />
 
       <MainButton title="Add Person" />
     </form>

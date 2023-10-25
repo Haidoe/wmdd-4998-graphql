@@ -23,15 +23,15 @@ export const GET_CARS_OF_PERSON_BY_ID = gql`
   }
 `;
 
-// export const ADD_CONTACT = gql`
-//   mutation AddContact($id: String!, $firstName: String!, $lastName: String!) {
-//     addContact(id: $id, firstName: $firstName, lastName: $lastName) {
-//       id
-//       firstName
-//       lastName
-//     }
-//   }
-// `
+export const ADD_PERSON = gql`
+  mutation AddPerson($id: String!, $firstName: String!, $lastName: String!) {
+    addPerson(id: $id, firstName: $firstName, lastName: $lastName) {
+      id
+      firstName
+      lastName
+    }
+  }
+`;
 
 // export const UPDATE_CONTACT = gql`
 //   mutation UpdateContact($id: String!, $firstName: String!, $lastName: String!) {
