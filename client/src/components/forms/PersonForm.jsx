@@ -1,5 +1,5 @@
 import MainButton from "../buttons/MainButton";
-import InputField from "./InputField";
+import InputField from "../inputs/InputField";
 
 const PersonForm = ({ onSubmit }) => {
   return (

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import MainButton from "../buttons/MainButton";
-import InputField from "./InputField";
-import PersonSelectField from "./PersonSelectField";
+import InputField from "../inputs/InputField";
+import PersonSelectField from "../inputs/PersonSelectField";
 
 const CarForm = () => {
   const [firstName, setFirstName] = useState("");
