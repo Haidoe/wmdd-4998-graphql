@@ -12,6 +12,8 @@ const PersonCard = ({ id, firstName, lastName }) => {
 
   if (error) return `Error! ${error.message}`;
 
+  console.log(data);
+
   return (
     <div className="p-4 border-2">
       <header className="flex justify-between">

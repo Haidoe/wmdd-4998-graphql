@@ -1,13 +1,20 @@
 import { v4 as uuidv4 } from "uuid";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import CarForm from "./components/forms/CarForm";
 import PersonForm from "./components/forms/PersonForm";
 import Header from "./components/layout/Header";
 import Records from "./components/list/Records";
-import { ADD_PERSON, GET_PEOPLE } from "./graphql/queries";
+import {
+  ADD_CAR,
+  ADD_PERSON,
+  GET_CARS_OF_PERSON_BY_ID,
+  GET_PEOPLE,
+} from "./graphql/queries";
 
 export default function App() {
+  const { loading, error, data } = useQuery(GET_PEOPLE);
   const [addPerson] = useMutation(ADD_PERSON);
+  const [addCar] = useMutation(ADD_CAR);
 
   const handleAddPerson = (e) => {
     e.preventDefault();
@@ -29,7 +36,7 @@ export default function App() {
             query: GET_PEOPLE,
             data: {
               ...data,
-              people: [...data.people, addPerson],
+              people: [addPerson, ...data.people],
             },
           });
         },
@@ -40,6 +47,64 @@ export default function App() {
       alert("Failed to add person");
     }
   };
+
+  const handleAddCar = (e) => {
+    e.preventDefault();
+
+    const data = new FormData(e.target);
+
+    const personId = data.get("personId");
+    const make = data.get("make");
+    const model = data.get("model");
+    const year = data.get("year");
+    const price = data.get("price");
+
+    try {
+      console.log({
+        variables: {
+          id: uuidv4(),
+          personId,
+          make,
+          model,
+          year: parseInt(year),
+          price: parseInt(price),
+        },
+      });
+
+      addCar({
+        variables: {
+          id: uuidv4(),
+          personId,
+          make,
+          model,
+          year: parseInt(year),
+          price: parseInt(price),
+        },
+        update: (cache, { data: { addCar } }) => {
+          const data = cache.readQuery({
+            query: GET_CARS_OF_PERSON_BY_ID,
+            variables: { id: personId },
+          });
+
+          //Optimistically Add Car to Cars Property
+          cache.writeQuery({
+            query: GET_CARS_OF_PERSON_BY_ID,
+            variables: { id: personId },
+            data: {
+              ...data,
+              carsOfPersonId: [...data.carsOfPersonId, addCar],
+            },
+          });
+        },
+      });
+    } catch (error) {
+      alert("Failed to add car");
+    }
+  };
+
+  if (loading) return "Loading...";
+
+  if (error) return `Error! ${error.message}`;
 
   return (
     <>
@@ -59,10 +124,11 @@ export default function App() {
             <h2 className="text-center font-semibold uppercase my-4">
               Add Car
             </h2>
-            <CarForm />
+
+            <CarForm people={data} onSubmit={handleAddCar} />
           </section>
 
-          <Records />
+          <Records data={data} />
         </main>
       </div>
     </>

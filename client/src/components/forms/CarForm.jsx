@@ -1,48 +1,25 @@
-import { useState } from "react";
 import MainButton from "../buttons/MainButton";
 import InputField from "../inputs/InputField";
-import PersonSelectField from "../inputs/PersonSelectField";
+import SelectField from "../inputs/SelectField";
 
-const CarForm = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("SUBMITT!!");
-  };
-
+const CarForm = ({ people, onSubmit }) => {
   return (
-    <form className="flex justify-center gap-4" onSubmit={handleSubmit}>
-      <InputField
-        title="Year"
-        isRequired
-        value={firstName}
-        onChange={setFirstName}
-      />
+    <form className="flex justify-center gap-4" onSubmit={onSubmit}>
+      <InputField title="Year" isRequired name="year" />
 
-      <InputField
-        title="Make"
-        isRequired
-        value={lastName}
-        onChange={setLastName}
-      />
+      <InputField title="Make" isRequired name="make" />
 
-      <InputField
-        title="Model"
-        isRequired
-        value={lastName}
-        onChange={setLastName}
-      />
+      <InputField title="Model" isRequired name="model" />
 
-      <InputField
-        title="Price"
-        isRequired
-        value={lastName}
-        onChange={setLastName}
-      />
+      <InputField title="Price" isRequired name="price" />
 
-      <PersonSelectField />
+      <SelectField
+        list={people.people}
+        title="Person"
+        placeholder="Select a person"
+        isRequired
+        name="personId"
+      />
 
       <MainButton title="Add Car" />
     </form>

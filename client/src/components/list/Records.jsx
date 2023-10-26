@@ -1,14 +1,6 @@
-import { useQuery } from "@apollo/client";
-import { GET_PEOPLE } from "../../graphql/queries";
 import PersonCard from "../listItem/PersonCard";
 
-const Records = () => {
-  const { loading, error, data } = useQuery(GET_PEOPLE);
-
-  if (loading) return "Loading...";
-
-  if (error) return `Error! ${error.message}`;
-
+const Records = ({ data }) => {
   return (
     <section>
       <h2 className="text-center font-semibold uppercase mb-4">Records</h2>
