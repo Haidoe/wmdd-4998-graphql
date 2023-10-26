@@ -8,8 +8,12 @@ import {
 import { Link } from "react-router-dom";
 import IconButton from "../buttons/IconButton";
 import CarCard from "./CarCard";
+import { useState } from "react";
+import PersonForm from "../forms/PersonForm";
 
 const PersonCard = ({ id, firstName, lastName }) => {
+  const [isEdit, setIsEdit] = useState(false);
+
   const [removePerson] = useMutation(REMOVE_PERSON, {
     update: (cache, { data: { removePerson } }) => {
       const data = cache.readQuery({ query: GET_PEOPLE });
@@ -40,34 +44,56 @@ const PersonCard = ({ id, firstName, lastName }) => {
     }
   };
 
+  const handleEditPerson = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+
+    console.log(data.get("firstName"));
+    console.log(data.get("lastName"));
+
+    setIsEdit(false);
+  };
+
   if (loading) return "Loading...";
 
   if (error) return `Error! ${error.message}`;
 
   return (
     <div className="p-4 border-2">
-      <header className="flex justify-between">
-        <h3>
-          {firstName} {lastName}
-        </h3>
+      {isEdit ? (
+        <PersonForm
+          btnTitle="Update User"
+          firstName={firstName}
+          lastName={lastName}
+          onSubmit={handleEditPerson}
+        />
+      ) : (
+        <header className="flex justify-between">
+          <h3>
+            {firstName} {lastName}
+          </h3>
 
-        <div className="flex gap-2 items-center">
-          <Link to={`/person/${id}`}>
-            <button className="uppercase text-blue-500">Learn More</button>
-          </Link>
+          <div className="flex gap-2 items-center">
+            <Link to={`/person/${id}`}>
+              <button className="uppercase text-blue-500">Learn More</button>
+            </Link>
 
-          <IconButton className="hover:text-gray-500">
-            <FaPenToSquare />
-          </IconButton>
+            <IconButton
+              className="hover:text-gray-500"
+              onClick={() => setIsEdit(true)}
+            >
+              <FaPenToSquare />
+            </IconButton>
 
-          <IconButton
-            className="hover:text-red-500"
-            onClick={handleRemovePerson}
-          >
-            <FaTrashCan />
-          </IconButton>
-        </div>
-      </header>
+            <IconButton
+              className="hover:text-red-500"
+              onClick={handleRemovePerson}
+            >
+              <FaTrashCan />
+            </IconButton>
+          </div>
+        </header>
+      )}
 
       {data.carsOfPersonId.length > 0 ? (
         <div className="content p-4 mt-4">
