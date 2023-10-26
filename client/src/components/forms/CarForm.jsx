@@ -4,7 +4,7 @@ import SelectField from "../inputs/SelectField";
 
 const CarForm = ({ people, onSubmit }) => {
   return (
-    <form className="flex justify-center gap-4" onSubmit={onSubmit}>
+    <form className="flex justify-center gap-4 flex-wrap" onSubmit={onSubmit}>
       <InputField title="Year" isRequired name="year" type="number" />
 
       <InputField title="Make" isRequired name="make" />
