@@ -5,13 +5,13 @@ import SelectField from "../inputs/SelectField";
 const CarForm = ({ people, onSubmit }) => {
   return (
     <form className="flex justify-center gap-4" onSubmit={onSubmit}>
-      <InputField title="Year" isRequired name="year" />
+      <InputField title="Year" isRequired name="year" type="number" />
 
       <InputField title="Make" isRequired name="make" />
 
       <InputField title="Model" isRequired name="model" />
 
-      <InputField title="Price" isRequired name="price" />
+      <InputField title="Price" isRequired name="price" type="number" />
 
       <SelectField
         list={people.people}

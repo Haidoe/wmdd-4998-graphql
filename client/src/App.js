@@ -60,17 +60,6 @@ export default function App() {
     const price = data.get("price");
 
     try {
-      console.log({
-        variables: {
-          id: uuidv4(),
-          personId,
-          make,
-          model,
-          year: parseInt(year),
-          price: parseInt(price),
-        },
-      });
-
       addCar({
         variables: {
           id: uuidv4(),
@@ -97,6 +86,8 @@ export default function App() {
           });
         },
       });
+
+      e.target.reset();
     } catch (error) {
       alert("Failed to add car");
     }
@@ -120,13 +111,15 @@ export default function App() {
             <PersonForm onSubmit={handleAddPerson} />
           </section>
 
-          <section className="py-4 mb-8">
-            <h2 className="text-center font-semibold uppercase my-4">
-              Add Car
-            </h2>
+          {data?.people?.length > 0 ? (
+            <section className="py-4 mb-8">
+              <h2 className="text-center font-semibold uppercase my-4">
+                Add Car
+              </h2>
 
-            <CarForm people={data} onSubmit={handleAddCar} />
-          </section>
+              <CarForm people={data} onSubmit={handleAddCar} />
+            </section>
+          ) : null}
 
           <Records data={data} />
         </main>
