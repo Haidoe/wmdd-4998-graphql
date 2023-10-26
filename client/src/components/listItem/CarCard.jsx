@@ -40,7 +40,7 @@ const CarCard = ({ id, year, model, make, price, personId }) => {
   return (
     <div className="flex justify-between items-center hover:bg-gray-200 rounded-sm px-4 py-2">
       <p>
-        {year} {make} {model} {"->"} ${price.toLocaleString()}
+        {year} {make} {model} {"|"} ${price.toLocaleString()}
       </p>
 
       <div className="flex gap-2">

@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-
 import "./index.css";
 import App from "./App";
+import PersonPage from "./pages/Person";
 
 const router = createBrowserRouter([
   {
@@ -12,8 +12,8 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/test",
-    element: <div>Test</div>,
+    path: "/person/:id",
+    element: <PersonPage />,
   },
 ]);
 
