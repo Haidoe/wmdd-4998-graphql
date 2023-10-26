@@ -11,7 +11,7 @@ import CarCard from "./CarCard";
 import { useState } from "react";
 import PersonForm from "../forms/PersonForm";
 
-const PersonCard = ({ id, firstName, lastName }) => {
+const PersonCard = ({ id, firstName, lastName, people }) => {
   const [isEdit, setIsEdit] = useState(false);
 
   const [removePerson] = useMutation(REMOVE_PERSON, {
@@ -106,6 +106,7 @@ const PersonCard = ({ id, firstName, lastName }) => {
               year={car.year}
               price={car.price}
               personId={car.personId}
+              people={people}
             />
           ))}
         </div>

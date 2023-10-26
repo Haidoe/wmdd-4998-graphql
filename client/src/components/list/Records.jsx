@@ -12,6 +12,7 @@ const Records = ({ data }) => {
             id={person.id}
             firstName={person.firstName}
             lastName={person.lastName}
+            people={data.people}
           />
         ))}
       </div>

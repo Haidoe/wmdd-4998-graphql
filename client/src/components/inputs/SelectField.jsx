@@ -1,4 +1,12 @@
-const SelectField = ({ list, title, placeholder, isRequired, name }) => {
+const SelectField = ({
+  list,
+  title,
+  placeholder,
+  isRequired,
+  name,
+  value,
+  onChange,
+}) => {
   return (
     <div className="relative h-10 w-full max-w-[200px]">
       <select
@@ -6,6 +14,8 @@ const SelectField = ({ list, title, placeholder, isRequired, name }) => {
         placeholder=" "
         required
         name={name}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
       >
         <option value="">{placeholder ?? "Select item"}</option>
         {list.map((item) => (

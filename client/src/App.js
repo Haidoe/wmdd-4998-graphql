@@ -117,7 +117,7 @@ export default function App() {
                 Add Car
               </h2>
 
-              <CarForm people={data} onSubmit={handleAddCar} />
+              <CarForm people={data.people} onSubmit={handleAddCar} />
             </section>
           ) : null}
 

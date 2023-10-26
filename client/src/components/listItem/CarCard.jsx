@@ -5,11 +5,14 @@ import {
   GET_CARS_OF_PERSON_BY_ID,
   REMOVE_PERSONS_CAR,
 } from "../../graphql/queries";
+import { useState } from "react";
+import CarForm from "../forms/CarForm";
 
-const CarCard = ({ id, year, model, make, price, personId }) => {
+const CarCard = ({ id, year, model, make, price, personId, people }) => {
   const [removeCar] = useMutation(REMOVE_PERSONS_CAR);
+  const [isEdit, setIsEdit] = useState(false);
 
-  const handleRemovePerson = () => {
+  const handleRemoveCar = () => {
     let result = window.confirm("Are you sure you want to delete this car?");
 
     if (result) {
@@ -37,6 +40,40 @@ const CarCard = ({ id, year, model, make, price, personId }) => {
     }
   };
 
+  const handleEditCar = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+
+    const year = parseInt(data.get("year"));
+    const make = data.get("make");
+    const model = data.get("model");
+    const price = parseInt(data.get("price"));
+    const personId = data.get("personId");
+
+    console.log({
+      id,
+      year,
+      make,
+      model,
+      price,
+      personId,
+    });
+  };
+
+  if (isEdit)
+    return (
+      <CarForm
+        people={people}
+        year={year}
+        model={model}
+        make={make}
+        price={price}
+        personId={personId}
+        btnTitle="Edit Car"
+        onSubmit={handleEditCar}
+      />
+    );
+
   return (
     <div className="flex justify-between items-center hover:bg-gray-200 rounded-sm px-4 py-2">
       <p>
@@ -44,11 +81,14 @@ const CarCard = ({ id, year, model, make, price, personId }) => {
       </p>
 
       <div className="flex gap-2">
-        <IconButton className="hover:text-gray-500">
+        <IconButton
+          className="hover:text-gray-500"
+          onClick={() => setIsEdit(true)}
+        >
           <FaPenToSquare />
         </IconButton>
 
-        <IconButton className="hover:text-red-500" onClick={handleRemovePerson}>
+        <IconButton className="hover:text-red-500" onClick={handleRemoveCar}>
           <FaTrashCan />
         </IconButton>
       </div>
