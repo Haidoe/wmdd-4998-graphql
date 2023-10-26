@@ -112,8 +112,6 @@ const typeDefs = `
   type Query {
     people: [Person]
     person(id: String!): Person
-    cars: [Car]
-    car(id: String!): Car
     carsOfPersonId(id: String!): [Car]
   }
 
@@ -137,10 +135,6 @@ const resolvers = {
       const person = find(people, { id: args.id });
       const personCars = cars.filter((car) => car.personId === args.id);
       return personCars;
-    },
-    cars: () => cars,
-    car: (root, args) => {
-      return find(cars, { id: args.id });
     },
   },
   Mutation: {
@@ -173,6 +167,10 @@ const resolvers = {
       if (!removedPerson) {
         throw new Error(`Couldn't find person with id ${args.id}`);
       }
+
+      remove(cars, (c) => {
+        return c.personId === removedPerson.id;
+      });
 
       remove(people, (c) => {
         return c.id === removedPerson.id;

@@ -70,12 +70,12 @@ export const ADD_CAR = gql`
 //   }
 // `
 
-// export const REMOVE_CONTACT = gql`
-//   mutation RemoveContact($id: String!) {
-//     removeContact(id: $id) {
-//       id
-//       firstName
-//       lastName
-//     }
-//   }
-// `
+export const REMOVE_PERSON = gql`
+  mutation RemovePerson($id: String!) {
+    removePerson(id: $id) {
+      id
+      firstName
+      lastName
+    }
+  }
+`;
