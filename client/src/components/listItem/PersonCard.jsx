@@ -7,6 +7,7 @@ import {
 } from "../../graphql/queries";
 import { Link } from "react-router-dom";
 import IconButton from "../buttons/IconButton";
+import CarCard from "./CarCard";
 
 const PersonCard = ({ id, firstName, lastName }) => {
   const [removePerson] = useMutation(REMOVE_PERSON, {
@@ -71,25 +72,15 @@ const PersonCard = ({ id, firstName, lastName }) => {
       {data.carsOfPersonId.length > 0 ? (
         <div className="content p-4 mt-4">
           {data.carsOfPersonId.map((car) => (
-            <div
+            <CarCard
               key={car.id}
-              className="flex justify-between items-center hover:bg-gray-200 rounded-sm px-4 py-2"
-            >
-              <p>
-                {car.year} {car.make} {car.model} {"->"} $
-                {car.price.toLocaleString()}
-              </p>
-
-              <div className="flex gap-2">
-                <IconButton className="hover:text-gray-500">
-                  <FaPenToSquare />
-                </IconButton>
-
-                <IconButton className="hover:text-red-500">
-                  <FaTrashCan />
-                </IconButton>
-              </div>
-            </div>
+              id={car.id}
+              make={car.make}
+              model={car.model}
+              year={car.year}
+              price={car.price}
+              personId={car.personId}
+            />
           ))}
         </div>
       ) : null}
