@@ -4,6 +4,7 @@ import {
   GET_CARS_OF_PERSON_BY_ID,
   GET_PEOPLE,
   REMOVE_PERSON,
+  UPDATE_PERSON,
 } from "../../graphql/queries";
 import { Link } from "react-router-dom";
 import IconButton from "../buttons/IconButton";
@@ -13,6 +14,7 @@ import PersonForm from "../forms/PersonForm";
 
 const PersonCard = ({ id, firstName, lastName, people }) => {
   const [isEdit, setIsEdit] = useState(false);
+  const [updatePerson] = useMutation(UPDATE_PERSON);
 
   const [removePerson] = useMutation(REMOVE_PERSON, {
     update: (cache, { data: { removePerson } }) => {
@@ -48,10 +50,32 @@ const PersonCard = ({ id, firstName, lastName, people }) => {
     e.preventDefault();
     const data = new FormData(e.target);
 
-    console.log(data.get("firstName"));
-    console.log(data.get("lastName"));
+    try {
+      updatePerson({
+        variables: {
+          id: id,
+          firstName: data.get("firstName"),
+          lastName: data.get("lastName"),
+        },
+        update: (cache, { data: { updatePerson } }) => {
+          const data = cache.readQuery({ query: GET_PEOPLE });
 
-    setIsEdit(false);
+          //Optimistically Updated Person to People Property
+          const people = data.people.map((person) =>
+            person.id === updatePerson.id ? updatePerson : person
+          );
+
+          cache.writeQuery({
+            query: GET_PEOPLE,
+            data: { people },
+          });
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsEdit(false);
+    }
   };
 
   if (loading) return "Loading...";
