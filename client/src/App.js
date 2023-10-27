@@ -10,6 +10,7 @@ import {
   GET_CARS_OF_PERSON_BY_ID,
   GET_PEOPLE,
 } from "./graphql/queries";
+import { useEffect } from "react";
 
 export default function App() {
   const { loading, error, data } = useQuery(GET_PEOPLE);
@@ -92,6 +93,10 @@ export default function App() {
       alert("Failed to add car");
     }
   };
+
+  useEffect(() => {
+    document.title = "People and their cars";
+  }, []);
 
   if (loading) return "Loading...";
 

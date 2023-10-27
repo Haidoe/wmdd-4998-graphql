@@ -3,6 +3,7 @@ import MainButton from "../components/buttons/MainButton";
 import Header from "../components/layout/Header";
 import { useQuery } from "@apollo/client";
 import { GET_PERSON } from "../graphql/queries";
+import { useEffect } from "react";
 
 const PersonPage = () => {
   const { id } = useParams();
@@ -13,6 +14,12 @@ const PersonPage = () => {
 
   //Enforce refetch
   refetch();
+
+  useEffect(() => {
+    if (data) {
+      document.title = `${data.personWithCar.person.firstName} ${data.personWithCar.person.lastName} | Car Dealership`;
+    }
+  }, [data]);
 
   if (loading) return <p>Loading...</p>;
 
