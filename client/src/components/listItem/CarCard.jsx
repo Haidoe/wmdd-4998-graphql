@@ -4,12 +4,14 @@ import { useMutation } from "@apollo/client";
 import {
   GET_CARS_OF_PERSON_BY_ID,
   REMOVE_PERSONS_CAR,
+  UPDATE_PERSONS_CAR,
 } from "../../graphql/queries";
 import { useState } from "react";
 import CarForm from "../forms/CarForm";
 
 const CarCard = ({ id, year, model, make, price, personId, people }) => {
   const [removeCar] = useMutation(REMOVE_PERSONS_CAR);
+  const [updateCar] = useMutation(UPDATE_PERSONS_CAR);
   const [isEdit, setIsEdit] = useState(false);
 
   const handleRemoveCar = () => {
@@ -24,7 +26,6 @@ const CarCard = ({ id, year, model, make, price, personId, people }) => {
             variables: { id: personId },
           });
 
-          //Optimistically Add Car to Cars Property
           cache.writeQuery({
             query: GET_CARS_OF_PERSON_BY_ID,
             variables: { id: personId },
@@ -48,16 +49,63 @@ const CarCard = ({ id, year, model, make, price, personId, people }) => {
     const make = data.get("make");
     const model = data.get("model");
     const price = parseInt(data.get("price"));
-    const personId = data.get("personId");
+    const newPersonId = data.get("personId");
 
-    console.log({
-      id,
-      year,
-      make,
-      model,
-      price,
-      personId,
-    });
+    try {
+      updateCar({
+        variables: {
+          id,
+          year,
+          make,
+          model,
+          price,
+          personId: newPersonId,
+        },
+        update: (cache, { data: { updateCar } }) => {
+          if (personId !== newPersonId) {
+            const currentData = cache.readQuery({
+              query: GET_CARS_OF_PERSON_BY_ID,
+              variables: { id: personId },
+            });
+
+            let newCurrentData = currentData.carsOfPersonId.filter(
+              (car) => car.id !== updateCar.id
+            );
+
+            newCurrentData = [...newCurrentData, updateCar];
+
+            newCurrentData = newCurrentData.filter(
+              (car) => car.personId === personId
+            );
+
+            cache.writeQuery({
+              query: GET_CARS_OF_PERSON_BY_ID,
+              variables: { id: personId },
+              data: {
+                carsOfPersonId: newCurrentData,
+              },
+            });
+
+            const newPersonIdData = cache.readQuery({
+              query: GET_CARS_OF_PERSON_BY_ID,
+              variables: { id: newPersonId },
+            });
+
+            cache.writeQuery({
+              query: GET_CARS_OF_PERSON_BY_ID,
+              variables: { id: newPersonId },
+              data: {
+                carsOfPersonId: [...newPersonIdData.carsOfPersonId, updateCar],
+              },
+            });
+          }
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsEdit(false);
+    }
   };
 
   if (isEdit)

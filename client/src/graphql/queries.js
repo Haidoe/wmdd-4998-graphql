@@ -112,3 +112,30 @@ export const REMOVE_PERSONS_CAR = gql`
     }
   }
 `;
+
+export const UPDATE_PERSONS_CAR = gql`
+  mutation UpdatePersonsCar(
+    $id: String!
+    $make: String!
+    $model: String!
+    $year: Int!
+    $price: Float!
+    $personId: String!
+  ) {
+    updateCar(
+      id: $id
+      make: $make
+      model: $model
+      year: $year
+      price: $price
+      personId: $personId
+    ) {
+      id
+      make
+      model
+      year
+      price
+      personId
+    }
+  }
+`;

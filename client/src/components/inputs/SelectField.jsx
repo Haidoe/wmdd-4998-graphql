@@ -14,8 +14,8 @@ const SelectField = ({
         placeholder=" "
         required
         name={name}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={value ?? ""}
+        onChange={onChange}
       >
         <option value="">{placeholder ?? "Select item"}</option>
         {list.map((item) => (
